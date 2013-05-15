@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/ProjectOne/src/main/java/com/yehui/androidwithtest/ProjectOne/activity/FenBeiLvActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ProjectOne/src/main/java/com/yehui/androidwithtest/ProjectOne/activity/MainActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ProjectOne/src/main/java/com/yehui/androidwithtest/ProjectOne/activity/TouchDemoActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ProjectOne/src/main/java/com/yehui/androidwithtest/ProjectOne/activity/base/BaseActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ProjectOne/src/main/java/com/yehui/androidwithtest/ProjectOne/view/CornerListView.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ProjectOne/src/main/java/com/yehui/androidwithtest/ProjectOne/view/MyLayout.java" charset="UTF-8" />
+  </component>
+</project>
+
