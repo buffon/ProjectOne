@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +18,10 @@ import com.yehui.androidwithtest.ProjectOne.R;
 import com.yehui.androidwithtest.ProjectOne.activity.base.BaseActivity;
 import com.yehui.androidwithtest.ProjectOne.view.CornerListView;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +31,7 @@ public class MainActivity extends BaseActivity {
 
     private Uri imageUri;
     private ImageView image;
+    private ImageView image3;
     private VideoView image2;
     private Button button ;
     private Button button2 ;
@@ -57,11 +63,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-              if(isNetworkAvailable(MainActivity.this)){
-                   //showLongToast("1");
-              }  else {
-                  //showLongToast("2");
-              }
+                if(isNetworkAvailable(MainActivity.this)){
+                    //showLongToast("1");
+                }  else {
+                    //showLongToast("2");
+                }
             }
         };
 
@@ -70,6 +76,7 @@ public class MainActivity extends BaseActivity {
         registerReceiver(connectionReceiver, intentFilter);
 
         image = (ImageView) findViewById(R.id.image);
+        image3 = (ImageView) findViewById(R.id.image3);
         image.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,PicActivity.class);
@@ -81,6 +88,7 @@ public class MainActivity extends BaseActivity {
         button = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
         button3 = (Button) findViewById(R.id.button3);
+        handlePic();
 
         getDataSource1();
         getDataSource2();
@@ -181,6 +189,20 @@ public class MainActivity extends BaseActivity {
         return map_list3;
     }
 
+    public void handlePic(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.kaka);
+        Log.i(TAG,bitmap.getWidth()+" Init ===== "+bitmap.getHeight());
+        Matrix matrix = new Matrix();
+
+        //float scale = Math.min(200/(float)230,200/(float)326);
+
+        Bitmap bitmap1 = ThumbnailUtils.extractThumbnail(bitmap,230,326); //40+200 < bitmap.getWidth() 不然报错
+        Bitmap bitmap2 = ThumbnailUtils.extractThumbnail(bitmap, 230 / 5, 326 / 5);
+        Log.i(TAG,bitmap1.getWidth()+" Init ===== "+bitmap1.getHeight());
+        image.setImageBitmap(bitmap);
+        //image3.setImageBitmap(bitmap1);
+    }
+
 
     class OnItemListSelectedListener implements AdapterView.OnItemClickListener {
 
@@ -199,14 +221,17 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 0:
-               if(resultCode == Activity.RESULT_OK){
-                   Bundle extras = data.getExtras();
-                   Bitmap b = (Bitmap) extras.get("data");
-               }
+                if(resultCode == Activity.RESULT_OK){
+                    Bundle extras = data.getExtras();
+                    Bitmap b = (Bitmap) extras.get("data");
+                }
             case 2:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle extras = data.getExtras();
                     Bitmap b = (Bitmap) extras.get("data");
+
+                    ThumbnailUtils.extractThumbnail(b,200,200);
+
                     Bitmap photoViewBitmap = null;
 //                    try {
 //                         photoViewBitmap = BitmapFactory.decodeStream(MainActivity.this.getContentResolver().openInputStream(photoUri));
@@ -224,11 +249,21 @@ public class MainActivity extends BaseActivity {
                     Uri originalUri = data.getData();
                     Bitmap bitmap = null;
                     Bitmap originalBitmap = null;
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 2;
+                    try {
+                        BitmapFactory.decodeFileDescriptor(new FileInputStream(new File("")).getFD());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     try {
                         originalBitmap = BitmapFactory.decodeStream(resolver.openInputStream(originalUri));
                         System.out.println("InitPic Width=" + originalBitmap.getWidth() + "  Height" + originalBitmap.getHeight());
                         bitmap = Bitmap.createBitmap(originalBitmap, 0, 0, 200, 200);
-                        System.out.println("Create Width="+bitmap.getWidth()+"  Height"+bitmap.getHeight());
+                        //bitmap = ThumbnailUtils.extractThumbnail(originalBitmap, 200, 200);
+                        Log.i(TAG,String.valueOf(bitmap.getWidth()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
